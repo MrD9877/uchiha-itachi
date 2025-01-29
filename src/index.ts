@@ -1,5 +1,5 @@
-import Button from "./button";
+import LocalDb from "./localDb";
 
 module.exports = {
-  Button,
+  LocalDb,
 };

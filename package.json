@@ -1,6 +1,6 @@
 {
-  "name": "dhuruv-bansal",
-  "version": "1.0.0",
+  "name": "uchiha-itachi",
+  "version": "2.0.0",
   "description": "function you need in every project in one package",
   "main": "dist/index.js",
   "types": "dist/index.d.tsx",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrD9877/dhuruv-bansal.git"
+    "url": "git+https://github.com/MrD9877/uchiha-itachi.git"
   },
   "keywords": [
     "dhuruv",
@@ -23,9 +23,9 @@
   "author": "Dhuruv Bansal",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MrD9877/dhuruv-bansal/issues"
+    "url": "https://github.com/MrD9877/uchiha-itachi/issues"
   },
-  "homepage": "https://github.com/MrD9877/dhuruv-bansal#readme",
+  "homepage": "https://github.com/MrD9877/uchiha-itachi#readme",
   "devDependencies": {
     "@types/react": "^19.0.8",
     "nodemon": "^3.0.0",
@@ -37,7 +37,9 @@
     "@babel/core": "^7.26.7",
     "@babel/preset-env": "^7.26.7",
     "@babel/preset-react": "^7.26.3",
+    "dotenv": "^16.4.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "socket.io-client": "^4.8.1"
   }
 }

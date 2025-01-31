@@ -43,7 +43,7 @@ type SendconnectionEstablished = {
   from: string;
 };
 
-export default function useRTCPeer(sendStream: () => void) {
+export default function useRTCPeer(sendStream: () => void | undefined) {
   const [state, setState] = useState<RTCComponentType>(undefined);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [request, setRequest] = useState(true);
@@ -79,7 +79,7 @@ export default function useRTCPeer(sendStream: () => void) {
   };
 
   const handleEstablished = async ({ success, from }: SendconnectionEstablished) => {
-    if (success && from === state?.coonectId) {
+    if (success && from === state?.coonectId && sendStream) {
       sendStream();
     }
   };

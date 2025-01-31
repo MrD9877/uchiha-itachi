@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SocketActions } from "../utilities/actions/peerActions";
 import peer from "../utilities/RTCpeerUtilities/peer";
 import { Socket } from "socket.io-client/build/esm";
@@ -42,8 +42,15 @@ type SendconnectionEstablished = {
   success: boolean;
   from: string;
 };
+type MediaFunctions =
+  | {
+      sendStream: () => void;
+      stopStream: () => void;
+    }
+  | undefined;
 
-export default function useRTCPeer(sendStream: () => void | undefined) {
+export default function useRTCPeer(mediaFunctions: MediaFunctions) {
+  const { sendStream, stopStream } = mediaFunctions || {};
   const [state, setState] = useState<RTCComponentType>(undefined);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [request, setRequest] = useState(true);
@@ -92,20 +99,36 @@ export default function useRTCPeer(sendStream: () => void | undefined) {
     sendOffer();
   }, [request]);
 
+  const endConnection = ({ from }: { from: string }) => {
+    if (from === state?.coonectId) {
+      stopStream && stopStream();
+      peer.closeConnection();
+    }
+  };
+
+  const closeConnection = async () => {
+    stopStream && stopStream();
+    peer.closeConnection();
+    socket?.emit(SocketActions.closeConnection, { from: state?.token, to: state?.coonectId });
+  };
+
   useEffect(() => {
     if (!socket) return;
     socket.on(SocketActions.receivedOffer, handleOffer);
     socket.on(SocketActions.receivedAnswer, handleAnswer);
     socket.on(SocketActions.connectionEstablished, handleEstablished);
+    socket.on(SocketActions.closeConnection, endConnection);
     if (peer.peer) {
       peer.peer.addEventListener("negotiationneeded", handleNegotiation);
     }
     return () => {
       socket.off(SocketActions.receivedOffer, handleOffer);
       socket.off(SocketActions.receivedAnswer, handleAnswer);
+      socket.off(SocketActions.closeConnection, endConnection);
+
       if (peer.peer) peer.peer.removeEventListener("negotiationneeded", handleNegotiation);
     };
   }, [state, peer.peer, socket]);
 
-  return [setSocket, setState, { startConnection }];
+  return [setSocket, setState, { startConnection, closeConnection, peer }];
 }

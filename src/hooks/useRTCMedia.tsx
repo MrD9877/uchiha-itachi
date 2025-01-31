@@ -27,13 +27,18 @@ export default function useRTCMedia() {
     setStream(event.streams[0]);
   };
 
-  //   useEffect(() => {
-  //     if (!type && localStream) {
-  //       localStream.getTracks().forEach((track) => {
-  //         track.stop(); // Stop each track (audio/video)
-  //       });
-  //     }
-  //   }, [type, connected, localStream]);
+  const stopStream = () => {
+    if (localStream) {
+      localStream.getTracks().forEach((track) => {
+        track.stop(); // Stop each track (audio/video)
+      });
+    }
+    if (stream) {
+      stream.getTracks().forEach((track) => {
+        track.stop(); // Stop each track (audio/video)
+      });
+    }
+  };
 
   useEffect(() => {
     if (peer.peer) {
@@ -46,5 +51,8 @@ export default function useRTCMedia() {
     };
   }, [peer.peer, type]);
 
-  return [setType, stream, sendStream];
+  return [
+    { setType, localStream, remoteStream: stream },
+    { sendStream, stopStream },
+  ];
 }

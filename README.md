@@ -108,7 +108,7 @@ use browser RTCpeer api to share media as of v-2.0.0 only two user connection is
 
 ```
 import { useRTCPeer } from "uchiha-itachi";
-  const [setPeerSocket, setPeerData, { startConnection }] = useRTCPeer();
+  const [setPeerSocket, setPeerData, { startConnection, closeConnection }] = useRTCPeer();
 ```
 
 ## setPeerSocket
@@ -142,8 +142,8 @@ startConnection()
 ```
 import { useRTCPeer, useRTCMedia } from "uchiha-itachi";
 
-  const [setType, stream, sendStream] = useRTCMedia();
-  const [setPeerSocket, setPeerData, { startConnection }] = useRTCPeer(sendStream);
+  const [{ setType, localStream, remoteStream }, mediaFnc] = useRTCMedia();
+  const [setPeerSocket, setPeerData, { startConnection, closeConnection }] = useRTCPeer(mediaFnc);
 
 ```
 
@@ -172,8 +172,8 @@ export default function Test() {
   const [connectId, setId] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const [connetRequest, setConnetRequest] = useState<boolean>(false);
-  const [setType, stream, sendStream] = useRTCMedia();
-  const [setPeerSocket, setPeerData, { startConnection }] = useRTCPeer(sendStream);
+  const [{ setType, localStream, remoteStream }, mediaFnc] = useRTCMedia();
+  const [setPeerSocket, setPeerData, { startConnection, closeConnection }] = useRTCPeer(mediaFnc);
 
   const start = () => {
     const room = searchParams.get("room");
@@ -214,7 +214,11 @@ export default function Test() {
   }, [setType, searchParams]);
   return (
     <div className="w-screen h-screen bg-white flex justify-center items-center flex-col gap-5">
-      {stream && <ReactPlayer playing={true} muted url={stream} width="150px" height="250px" />}
+      {remoteStream && <ReactPlayer playing={true} muted url={remoteStream} width="150px" height="250px" />}
+      {localStream && <ReactPlayer playing={true} muted url={localStream} width="150px" height="250px" />}
+      <button className="text-black px-2 py-1 bg-blue-700 mx-8" onClick={closeConnection}>
+        stop
+      </button>
       {connetRequest ? (
         <>
           <button className="text-black px-2 py-1 bg-blue-700 mx-8" onClick={handleAccept}>
@@ -229,11 +233,9 @@ export default function Test() {
           </button>
         </>
       )}
-      <button className="text-black px-2 py-1 bg-blue-700 mx-8" onClick={sendStream}>
-        sendS
-      </button>
     </div>
   );
 }
+
 
 ```

@@ -44,7 +44,7 @@ export class PeerService {
   }
   isConnected(): boolean | string {
     if (this.peer) {
-      return this.peer.iceConnectionState === "connected";
+      return this.peer.iceConnectionState;
     }
     return false;
   }

@@ -6,4 +6,4 @@ module.exports = {
   LocalDb,
   useRTCPeer,
   useRTCMedia,
-};
+} as const;

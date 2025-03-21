@@ -1,6 +1,6 @@
 {
   "name": "uchiha-itachi",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "function you need in every project in one package",
   "main": "dist/index.js",
   "types": "dist/index.d.tsx",
